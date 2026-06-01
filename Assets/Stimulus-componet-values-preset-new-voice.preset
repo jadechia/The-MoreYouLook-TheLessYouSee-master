@@ -1,0 +1,172 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!181963792 &2655988077585873504
+Preset:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Stimulus-componet-values-preset-new-voice
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: 7aa4295c0fc3f184e958b6993defa2c5, type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: Assembly-CSharp::Stimulus
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: callingSounds.Array.size
+    value: 6
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: 'callingSounds.Array.data[0]'
+    value: 
+    objectReference: {fileID: 8300000, guid: 4f011a2bc1a91874897c7d7ed41a7fc8, type: 3}
+  - target: {fileID: 0}
+    propertyPath: 'callingSounds.Array.data[1]'
+    value: 
+    objectReference: {fileID: 8300000, guid: 5179a395743b22147964332719305416, type: 3}
+  - target: {fileID: 0}
+    propertyPath: 'callingSounds.Array.data[2]'
+    value: 
+    objectReference: {fileID: 8300000, guid: c73101a91b11c9c48bfb1581b5602913, type: 3}
+  - target: {fileID: 0}
+    propertyPath: 'callingSounds.Array.data[3]'
+    value: 
+    objectReference: {fileID: 8300000, guid: 81efefb289adb14428132e172b2a362b, type: 3}
+  - target: {fileID: 0}
+    propertyPath: 'callingSounds.Array.data[4]'
+    value: 
+    objectReference: {fileID: 8300000, guid: 00efb52e5ab9370468e449adac57be15, type: 3}
+  - target: {fileID: 0}
+    propertyPath: 'callingSounds.Array.data[5]'
+    value: 
+    objectReference: {fileID: 8300000, guid: 5e02f5f8755b3cc42a843fce991715ac, type: 3}
+  - target: {fileID: 0}
+    propertyPath: voiceClips.Array.size
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: 'voiceClips.Array.data[0]'
+    value: 
+    objectReference: {fileID: 8300000, guid: fe3f4b5684d62b946a8188089559e885, type: 3}
+  - target: {fileID: 0}
+    propertyPath: pitchMin
+    value: 0.92
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: pitchMax
+    value: 1.08
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: caughtSound
+    value: 
+    objectReference: {fileID: 8300000, guid: 673062a79ca4f984498d2dbefb83fceb, type: 3}
+  - target: {fileID: 0}
+    propertyPath: caughtVolume
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: glowLight
+    value: 
+    objectReference: {fileID: 3161833813145524461, guid: 636f552cb780b1849ae011a485ccd848, type: 3}
+  - target: {fileID: 0}
+    propertyPath: meshRenderer
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: seenAngle
+    value: 24
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: neglectAngle
+    value: 40
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: minPeripheralAngle
+    value: 55
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: maxPeripheralAngle
+    value: 115
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: orbitRadius
+    value: 4
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: orbitNoiseStrength
+    value: 0.6
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: boundarySteerStrength
+    value: 3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: noiseSpeed
+    value: 0.4
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: flickerSpeed
+    value: 8
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: flickerIntensity
+    value: 3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: preLookFadeDelay
+    value: 10
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: preLookFadeDuration
+    value: 18
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: preLookMaxDistance
+    value: 15
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: postLookFadeDelay
+    value: 10
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: postLookFadeDuration
+    value: 30
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: postLookMaxDistance
+    value: 8
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: callingVolumeMax
+    value: 0.9
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: callingVolumeMin
+    value: 0.04
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: voiceVolumeOnLook
+    value: 0.7
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: voiceVolumeMin
+    value: 0.02
+    objectReference: {fileID: 0}
+  m_ExcludedProperties: []
+  m_CoupledType:
+    m_NativeTypeID: 0
+    m_ManagedTypePPtr: {fileID: 0}
+    m_ManagedTypeFallback: 
+  m_CoupledProperties: []

@@ -1,0 +1,324 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!181963792 &2655988077585873504
+Preset:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: OrganicGazeMap-preset-testing-values-1
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: 843acf69790035f43954a9e0fc2acccf, type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: Assembly-CSharp::OrganicGazeMap
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: headCamera
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: followCameraPosition
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fixedCentre.x
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fixedCentre.y
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fixedCentre.z
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: radiusAtStart
+    value: 3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: radiusAtMax
+    value: 13
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: looksForMaxRadius
+    value: 30
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: radiusEaseSpeed
+    value: 0.6
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: followDamping
+    value: 0.035
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: splineResolution
+    value: 7
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: minSampleDistance
+    value: 0.12
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: widthSlow
+    value: 0.8
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: widthFast
+    value: 0.08
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: speedForThinnest
+    value: 7
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: widthEaseSpeed
+    value: 1.79
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fixationNodePrefab
+    value: 
+    objectReference: {fileID: 984577324995496852, guid: 377c5119a0099384ea081f7208a64500, type: 3}
+  - target: {fileID: 0}
+    propertyPath: fixationSpeedThreshold
+    value: 0.5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fixationDwellTime
+    value: 0.35
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fixationCooldown
+    value: 0.8
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineMaterial
+    value: 
+    objectReference: {fileID: 2100000, guid: aea44ce493afd654c8f91ad53ec4b19c, type: 2}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key0.r
+    value: 0.68066925
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key0.g
+    value: 0.90188676
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key0.b
+    value: 0.791278
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key0.a
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key1.r
+    value: 0.70692766
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key1.g
+    value: 0.7180193
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key1.b
+    value: 0.95094335
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key1.a
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key2.r
+    value: 0.93207544
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key2.g
+    value: 0.6295906
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key2.b
+    value: 0.83132213
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key2.a
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key3.r
+    value: 0.8603773
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key3.g
+    value: 0.4902527
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key3.b
+    value: 0.6095151
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key3.a
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key4.r
+    value: 0.87547165
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key4.g
+    value: 0.6195386
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key4.b
+    value: 0.42947668
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key4.a
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key5.r
+    value: 0.87169814
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key5.g
+    value: 0.8183803
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key5.b
+    value: 0.59538627
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key5.a
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key6.r
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key6.g
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key6.b
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key6.a
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key7.r
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key7.g
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key7.b
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.key7.a
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.ctime0
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.ctime1
+    value: 14649
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.ctime2
+    value: 35235
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.ctime3
+    value: 48573
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.ctime4
+    value: 56206
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.ctime5
+    value: 62914
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.ctime6
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.ctime7
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.atime0
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.atime1
+    value: 65535
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.atime2
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.atime3
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.atime4
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.atime5
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.atime6
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.atime7
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.m_Mode
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.m_ColorSpace
+    value: -1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.m_NumColorKeys
+    value: 6
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: lineColor.m_NumAlphaKeys
+    value: 2
+    objectReference: {fileID: 0}
+  m_ExcludedProperties: []
+  m_CoupledType:
+    m_NativeTypeID: 0
+    m_ManagedTypePPtr: {fileID: 0}
+    m_ManagedTypeFallback: 
+  m_CoupledProperties: []

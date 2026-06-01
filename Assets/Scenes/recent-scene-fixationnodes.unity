@@ -175,6 +175,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3609700986101364693, guid: 636f552cb780b1849ae011a485ccd848, type: 3}
+      propertyPath: voiceVolumeMin
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3609700986101364693, guid: 636f552cb780b1849ae011a485ccd848, type: 3}
+      propertyPath: voiceVolumeOnLook
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3609700986101364693, guid: 636f552cb780b1849ae011a485ccd848, type: 3}
+      propertyPath: 'voiceClips.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: fe3f4b5684d62b946a8188089559e885, type: 3}
+    - target: {fileID: 3609700986101364693, guid: 636f552cb780b1849ae011a485ccd848, type: 3}
+      propertyPath: 'callingSounds.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: ddc5a835e9b026b4f81a19224b4672f0, type: 3}
     - target: {fileID: 6591776981396864856, guid: 636f552cb780b1849ae011a485ccd848, type: 3}
       propertyPath: palette.ctime2
       value: 35235
@@ -319,6 +335,7 @@ GameObject:
   m_Component:
   - component: {fileID: 326338035}
   - component: {fileID: 326338034}
+  - component: {fileID: 326338036}
   m_Layer: 7
   m_Name: MapVolume
   m_TagString: Untagged
@@ -341,7 +358,7 @@ MonoBehaviour:
   m_IsGlobal: 1
   priority: 0
   blendDistance: 0
-  weight: 1
+  weight: 0.7
   sharedProfile: {fileID: 11400000, guid: 6a364cdd591b45140b8da3a9d75eb0b3, type: 2}
 --- !u!4 &326338035
 Transform:
@@ -358,6 +375,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &326338036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 326338033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b7243038c472af4fbbeebcf86ee6a56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HueRandomiser
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -673,7 +702,7 @@ MonoBehaviour:
   widthFast: 0.04
   speedForThinnest: 5
   widthEaseSpeed: 2
-  fixationNodePrefab: {fileID: 1493210557043369274, guid: 9e24fb5721fc18648a2415f723566b7d, type: 3}
+  fixationNodePrefab: {fileID: 984577324995496852, guid: 377c5119a0099384ea081f7208a64500, type: 3}
   fixationSpeedThreshold: 0.4
   fixationDwellTime: 0.4
   fixationCooldown: 0.8
@@ -958,7 +987,6 @@ GameObject:
   m_Component:
   - component: {fileID: 919087273}
   - component: {fileID: 919087272}
-  - component: {fileID: 919087271}
   - component: {fileID: 919087270}
   m_Layer: 0
   m_Name: MapCamera
@@ -1011,14 +1039,6 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!81 &919087271
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919087269}
-  m_Enabled: 1
 --- !u!20 &919087272
 Camera:
   m_ObjectHideFlags: 0
@@ -1157,7 +1177,6 @@ GameObject:
   - component: {fileID: 1452755249}
   - component: {fileID: 1452755248}
   - component: {fileID: 1452755247}
-  - component: {fileID: 1452755251}
   - component: {fileID: 1452755252}
   m_Layer: 0
   m_Name: Main Camera
@@ -1394,34 +1413,6 @@ Transform:
   - {fileID: 2078869573}
   m_Father: {fileID: 1768407400}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1452755251
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1452755245}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 743611dcc75c5564d8e6b6c98646baa8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ExperienceAudioManager
-  introLeft: {fileID: 8300000, guid: 7230fa9b0daf4cc43b75c1923980add1, type: 3}
-  introRight: {fileID: 8300000, guid: 76fa81e509c2a7d4b923a4fa35dc7db0, type: 3}
-  introDelay: 1.5
-  introPause: 0.5
-  voiceClip: {fileID: 0}
-  audioMixer: {fileID: 0}
-  voiceVolumeParam: VoiceVolume
-  voiceLowPassParam: VoiceLowPass
-  ambienceClip: {fileID: 8300000, guid: f51d687f332ca0b4ea5a6dd8d255f7fa, type: 3}
-  ambienceVolume: 0.3
-  silenceBeforeVoice: 4.5
-  volumeDropPerLook: 0.035
-  lowPassDropPerLook: 700
-  minVolume: 0.06
-  maxLowPassCutoff: 22000
-  minLowPassCutoff: 350
 --- !u!114 &1452755252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1686,15 +1677,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExperienceAudioManager
   introLeft: {fileID: 8300000, guid: 7230fa9b0daf4cc43b75c1923980add1, type: 3}
   introRight: {fileID: 8300000, guid: 76fa81e509c2a7d4b923a4fa35dc7db0, type: 3}
-  introDelay: 2
-  introPause: 0.8
-  voiceClip: {fileID: 8300000, guid: 6814308484eaf204e955ded2ac2f5f24, type: 3}
+  introDelay: 1.6
+  introPause: 0.5
+  voiceClip: {fileID: 8300000, guid: fe3f4b5684d62b946a8188089559e885, type: 3}
   audioMixer: {fileID: 0}
   voiceVolumeParam: VoiceVolume
   voiceLowPassParam: VoiceLowPass
   ambienceClip: {fileID: 8300000, guid: f51d687f332ca0b4ea5a6dd8d255f7fa, type: 3}
   ambienceVolume: 0.4
-  silenceBeforeVoice: 6
+  silenceBeforeVoice: 3.4
   volumeDropPerLook: 0.035
   lowPassDropPerLook: 700
   minVolume: 0.06

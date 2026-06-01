@@ -12,30 +12,30 @@ public class OrganicGazeMap : MonoBehaviour
 
     [Header("Projection radius based on look count")]
     public float radiusAtStart = 3f; public float radiusAtMax = 14f; public int looksForMaxRadius = 30;
-    [Range(0.1f, 5f)] public float radiusEaseSpeed = 0.6f;
+    [Range(0.1f, 5f)] public float radiusEaseSpeed = 0.5f;
     private float projectionRadius; 
 
     [Header("Smoothing")]
     [Tooltip("lag")]
-    [Range(0.01f, 1f)] public float followDamping = 0.04f;
+    [Range(0.01f, 1f)] public float followDamping = 0.03f;
     [Tooltip("no. points  between sample coords")]
     [Range(2, 12)] public int splineResolution = 7;
     [Tooltip("min travel before new point is recorded")]
-    public float minSampleDistance = 0.12f;
+    public float minSampleDistance = 0.05f;
 
-    [Header("Width based on movement speed")]
-    public float widthSlow = 0.4f;        // thick when gaze is slow
-    public float widthFast = 0.04f;        // thin when head whips
-    public float speedForThinnest = 4f;
+    [Header("Width based on movement speed")] // dynamic width so its thick when head moves slowly and quick when it moves faster
+    public float widthSlow = 0.8f;
+    public float widthFast = 0.08f;       
+    public float speedForThinnest = 6f;
     [Tooltip("how fast width transitions toward the new width target")]
-    [Range(0.5f, 10f)] public float widthEaseSpeed = 2f;
+    [Range(0.5f, 10f)] public float widthEaseSpeed = 1.5f;
 
     [Header("Fixations")]
     public GameObject fixationNodePrefab;          // small blob/sphere
     [Tooltip("min speed to count as a fixation hold.")]
     public float fixationSpeedThreshold = 0.4f;
     [Tooltip("Seconds of dwell before the node blooms.")]
-    public float fixationDwellTime = 0.4f;
+    public float fixationDwellTime = 0.6f;
     [Tooltip("minimum time gap between spawned nodes ")]
     public float fixationCooldown = 0.8f;
     // public float nodeMaxScale = 0.9f;
@@ -114,7 +114,9 @@ public class OrganicGazeMap : MonoBehaviour
         smoothedPoint = Vector3.Lerp(smoothedPoint, target, damp);
 
         // speed measurement
-        currentSpeed = Vector3.Distance(smoothedPoint, prevFramePoint) / Time.deltaTime;
+        currentSpeed = Time.deltaTime > 0.0001f
+        ? Vector3.Distance(smoothedPoint, prevFramePoint) / Time.deltaTime
+        : 0f;
         prevFramePoint = smoothedPoint;
 
         float speedT = Mathf.Clamp01(currentSpeed / speedForThinnest);
@@ -122,13 +124,11 @@ public class OrganicGazeMap : MonoBehaviour
         smoothedWidth = Mathf.Lerp(smoothedWidth, targetWidth,
             Time.deltaTime * widthEaseSpeed);
 
-        // only take points if the headset has moved enough (min sample distance)
+        // only taking points if the headset has moved enough (min sample distance)
         if (Vector3.Distance(smoothedPoint, lastSamplePoint) >= minSampleDistance)
         {
             controlPoints.Add(smoothedPoint);
             lastSamplePoint = smoothedPoint;
-
-            // draw the new segment as a ribbon
             ExtendRibbon();
         }
 
@@ -191,8 +191,12 @@ public class OrganicGazeMap : MonoBehaviour
 
     void AddRibbonPoint(Vector3 pos, float width)
     {
+        if (float.IsNaN(pos.x) || float.IsInfinity(pos.x) || float.IsNaN(width) || float.IsInfinity(width))
+            return; // kept getting a NaN error when the ditor glitched, added a failsafe
+
         if (!ribbonStarted)
         {
+        
             lastRibbonPoint = pos;
             ribbonStarted = true;
             return;

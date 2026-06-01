@@ -16,6 +16,9 @@ public class Stimulus : MonoBehaviour
     public AudioClip caughtSound;
     public float caughtVolume = 1f;
 
+    [Header("Caught Visual Animation")]
+    public ParticleSystem caughtBurst;
+
     [Header("Visual")]
     public Light glowLight;
     public Renderer meshRenderer;
@@ -79,7 +82,7 @@ public class Stimulus : MonoBehaviour
         voiceSource   = gameObject.AddComponent<AudioSource>();
 
         ConfigureSource(callingSource, spatialBlend: 1f,  minDist: 1f, maxDist: 8f);
-        ConfigureSource(voiceSource,   spatialBlend: 0.6f, minDist: 1f, maxDist: 10f);
+        ConfigureSource(voiceSource,   spatialBlend: 0f, minDist: 1f, maxDist: 10f);
     }
 
     void ConfigureSource(AudioSource src, float spatialBlend,
@@ -154,9 +157,9 @@ public class Stimulus : MonoBehaviour
 
         float t = Time.time * noiseSpeed;
         Vector3 wander = new Vector3(
-            Mathf.PerlinNoise(t + noiseOffsetX, 0f)       * 2f - 1f,
-            (Mathf.PerlinNoise(t + noiseOffsetX, 99f)     * 2f - 1f) * 0.3f,
-            Mathf.PerlinNoise(0f, t + noiseOffsetZ)       * 2f - 1f
+            Mathf.PerlinNoise(t + noiseOffsetX, 0f) * 2f - 1f,
+            (Mathf.PerlinNoise(t + noiseOffsetX, 99f) * 2f - 1f) * 0.3f,
+            Mathf.PerlinNoise(0f, t + noiseOffsetZ) * 2f - 1f
         ).normalized * wanderSpeed;
 
         Vector3 desired  = wander + steer;
@@ -186,8 +189,7 @@ public class Stimulus : MonoBehaviour
         for (int i = 0; i < 40; i++)
         {
             Vector3 candidate = camPos + Random.onUnitSphere * orbitRadius;
-            float   angle     = HeadTracker.Instance.AngleToTarget(candidate);
-
+            float angle = HeadTracker.Instance.AngleToTarget(candidate);
             if (angle >= minPeripheralAngle && angle <= maxPeripheralAngle)
                 return candidate;
         }
@@ -196,10 +198,17 @@ public class Stimulus : MonoBehaviour
             + HeadTracker.Instance.headCamera.transform.right * orbitRadius;
     }
 
+    public void QuieterScript(float toVolume)
+    {
+        if (voiceSource != null && voiceSource.isPlaying)
+        voiceSource.volume = toVolume;
+    }
+
 
 
     void UpdateAttention(float angle)
     {
+        if (IsDead) return;
         if (angle < seenAngle && !hasBeenLookedAt)
         {
             hasBeenLookedAt  = true;
@@ -209,15 +218,17 @@ public class Stimulus : MonoBehaviour
             if (caughtSound != null)
             AudioSource.PlayClipAtPoint(caughtSound, transform.position, caughtVolume);
 
-            // Picks a random voice clip and randomises pitch
+            // Picking a voice script audio clip and randomising its pitch
             if (voiceClips != null && voiceClips.Length > 0)
             {
                 voiceSource.clip   = voiceClips[Random.Range(0, voiceClips.Length)];
                 voiceSource.pitch  = Random.Range(pitchMin, pitchMax);
                 voiceSource.volume = voiceVolumeOnLook;
-                voiceSource.loop   = true;
+                voiceSource.loop   = false;
                 voiceSource.Play();
             }
+
+            caughtBurst.Play();
 
             StimulusManager.Instance.OnStimulusLookedAt(this);
         }
@@ -252,18 +263,10 @@ public class Stimulus : MonoBehaviour
             fadeAmount   = Mathf.Lerp(fadeAmount, 0f, Time.deltaTime * 2f);
         }
 
-        // Calling sound fades with neglect
+        // Calling sound fades if the stimulus is being ignored
         float targetCalling  = Mathf.Lerp(callingVolumeMax, callingVolumeMin, fadeAmount);
         callingSource.volume = Mathf.Lerp(
             callingSource.volume, targetCalling, Time.deltaTime * 1.5f);
-
-        // Voice fades slowly if speaking
-        if (hasBeenLookedAt && voiceSource.isPlaying)
-        {
-            float targetVoice  = Mathf.Lerp(voiceVolumeOnLook, voiceVolumeMin, fadeAmount);
-            voiceSource.volume = Mathf.Lerp(
-                voiceSource.volume, targetVoice, Time.deltaTime * 0.5f);
-        }
     }
 
     IEnumerator Disintegrate()
@@ -285,9 +288,7 @@ public class Stimulus : MonoBehaviour
 
             if (glowLight != null)
                 glowLight.intensity = Mathf.Lerp(startLight, 0f, t);
-
             callingSource.volume = Mathf.Lerp(startVol, 0f, t);
-
             yield return null;
         }
 
@@ -301,9 +302,9 @@ public class Stimulus : MonoBehaviour
         if (glowLight == null) return;
 
         float flicker =
-            Mathf.Sin(Time.time * flickerSpeed)         * 0.4f +
-            Mathf.Sin(Time.time * flickerSpeed * 2.3f)  * 0.3f +
-            Mathf.Sin(Time.time * flickerSpeed * 5.7f)  * 0.2f +
+            Mathf.Sin(Time.time * flickerSpeed)* 0.4f +
+            Mathf.Sin(Time.time * flickerSpeed * 2.3f)* 0.3f +
+            Mathf.Sin(Time.time * flickerSpeed * 5.7f)* 0.2f +
             Mathf.Sin(Time.time * flickerSpeed * 11.3f) * 0.1f;
 
         flicker = (flicker + 1f) * 0.5f;

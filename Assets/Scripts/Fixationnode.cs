@@ -9,12 +9,12 @@ public class FixationNode : MonoBehaviour
     public GameObject blobPrefab;
 
     [Header("Growth pace")]
-    public float secondsPerGeneration = 0.35f;
-    public int maxGenerations = 5;
+    public float secondsPerGeneration = 0.5f;
+    public int maxGenerations = 3;
 
     [Header("Branch shape")]
-    public Vector2Int branchesPerBlob = new Vector2Int(2, 4);
-    public float baseBranchLength = 0.6f;
+    public Vector2Int branchesPerBlob = new Vector2Int(1, 3);
+    public float baseBranchLength = 1.3f;
     [Tooltip("decreasing the size each round by this fraction (multiply not sub)")]
     public float lengthFalloff = 0.7f;
     public float baseBranchWidth = 0.06f;
@@ -29,6 +29,8 @@ public class FixationNode : MonoBehaviour
     public float blobGrowTime = 0.5f;
 
     // private vars to track the internal growth state:
+    private int totalBranches = 0;
+    public int absoluteMaxBranches = 24;   // just in case of glitches i'm making a branch ceiling at 24 per node to avoid performance crashes.
     private int currentGeneration = 0;
     private float dwellAccumulated = 0f;
     private bool growing = true;
@@ -59,7 +61,6 @@ public class FixationNode : MonoBehaviour
     public void Expand(float deltaTime)
     {
         if (!growing) return;
-
         dwellAccumulated += deltaTime;
 
         if (dwellAccumulated >= secondsPerGeneration)
@@ -80,15 +81,19 @@ public class FixationNode : MonoBehaviour
         currentGeneration++;
         List<Tip> nextTips = new List<Tip>();
 
-        foreach (Tip tip in activeTips)
-        {
+        foreach (Tip tip in activeTips) {
+
+            if (totalBranches >= absoluteMaxBranches) { // checking if there are more than 60 brnaches in a node 
+                growing = false; break;} 
+
+            totalBranches++;
+        
             int gen = tip.gen;
             float length = baseBranchLength * Mathf.Pow(lengthFalloff, gen);
             float width  = baseBranchWidth  * Mathf.Pow(widthFalloff, gen);
 
-            // curved branch from the tip 
+            // allows for the curved branch:
             Vector3 endPos = GrowBranch(tip.pos, tip.dir, length, width, gen);
-
             
             float blobScale = baseBlobScale * Mathf.Pow(blobFalloff, gen + 1);
             SpawnBlob(endPos, gen + 1, blobScale); // spawn a blob at the new tip
@@ -103,6 +108,9 @@ public class FixationNode : MonoBehaviour
         }
 
         activeTips = nextTips;
+        const int maxTips = 20;
+        if (activeTips.Count > maxTips)
+            activeTips.RemoveRange(maxTips, activeTips.Count - maxTips); // adding a fallback for performance bc the program kept crashing when the tip count exploded due to exponential branches.
     }
     // the function that grows the branches out from the blobs:
     Vector3 GrowBranch(Vector3 start, Vector3 dir, float length, float width, int gen)
@@ -184,7 +192,11 @@ public class FixationNode : MonoBehaviour
         if (blob != null) blob.localScale = final;
     }
 
-    // pasting the quadratic bezier, cone direction maths functions i used:
+// ----------------------------
+// maths funcs!
+// pasting the quadratic bezier, cone direction maths functions i used:
+// referenced https://stackoverflow.com/questions/30339226/finding-points-on-a-quadratic-bezier-curve-path
+//
 
     static Vector3 QuadraticBezier(Vector3 a, Vector3 b, Vector3 c, float t)
     {

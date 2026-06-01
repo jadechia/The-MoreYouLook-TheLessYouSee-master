@@ -9,8 +9,8 @@ public class ExperienceAudioManager : MonoBehaviour
     [Header("Intro Stereo")]
     public AudioClip introLeft;        // "the more you look"
     public AudioClip introRight;       // "the less you see"
-    public float introDelay = 1.5f;    // seconds after scene load before intro plays
-    public float introPause = 0.5f;    // gap between left and right
+    public float introDelay = 1f;    // seconds after scene load before intro plays
+    public float introPause = 0.2f;    // gap between left and right
 
     private AudioSource introSourceL;
     private AudioSource introSourceR;
@@ -23,7 +23,7 @@ public class ExperienceAudioManager : MonoBehaviour
 
     [Header("Ambience")]
     public AudioClip ambienceClip;
-    public float ambienceVolume = 0.3f;
+    public float ambienceVolume = 0.12f;
 
     [Header("Timing")]
     public float silenceBeforeVoice = 1f;
@@ -31,7 +31,7 @@ public class ExperienceAudioManager : MonoBehaviour
     [Header("Degradation")]
     public float volumeDropPerLook  = 0.035f;
     public float lowPassDropPerLook = 700f;
-    public float minVolume          = 0.06f;
+    public float minVolume          = 0.02f;
     public float maxLowPassCutoff   = 22000f;
     public float minLowPassCutoff   = 350f;
 
@@ -69,20 +69,11 @@ public class ExperienceAudioManager : MonoBehaviour
         ambienceSource.playOnAwake  = false;
         ambienceSource.volume       = ambienceVolume;
 
-        currentVolume   = 0.85f;
+        currentVolume   = 0.75f;
         currentLowPass  = maxLowPassCutoff;
     }
 
-    void Start()
-    {
-        // if (ambienceClip != null)
-        // {
-        //     ambienceSource.clip = ambienceClip;
-        //     ambienceSource.Play();
-        // }
-
-        StartCoroutine(IntroSequence());
-    }
+    void Start() { StartCoroutine(IntroSequence());}
 
     IEnumerator IntroSequence()
     {
@@ -127,40 +118,55 @@ public class ExperienceAudioManager : MonoBehaviour
 
     IEnumerator MonitorVoiceCompletion()
     {
-        // wait until the clip has finished playing
+        // waitin until the clip has finished playing
         while (voiceSource.isPlaying)
             yield return new WaitForSeconds(0.5f);
-
         OnVoiceCompleted();
     }
 
     public void RegisterLook()
     {
-        currentVolume  = Mathf.Max(minVolume,
-            currentVolume - volumeDropPerLook);
-
-        currentLowPass = Mathf.Max(minLowPassCutoff,
-            currentLowPass - lowPassDropPerLook);
-
+        currentVolume  = Mathf.Max(minVolume, currentVolume *0.28f);
+        voiceSource.volume = currentVolume; 
         ApplyMixerSettings();
     }
 
     void ApplyMixerSettings()
     {
-        if (audioMixer == null) return;
-
-        float db = currentVolume > 0.001f
-            ? 20f * Mathf.Log10(currentVolume)
-            : -80f;
-
-        audioMixer.SetFloat(voiceVolumeParam,  db);
-        audioMixer.SetFloat(voiceLowPassParam, currentLowPass);
+        // if (audioMixer == null) return;
+        // audioMixer.SetFloat(voiceVolumeParam,  db);
+        // audioMixer.SetFloat(voiceLowPassParam, currentLowPass);
     }
 
     void OnVoiceCompleted()
     {
         StimulusManager.Instance.OnExperienceResolved();
         StartCoroutine(FadeAmbience());
+    }
+
+    public void ResolveAudio(float fadeTime)
+    {
+        StopAllCoroutines(); 
+        StartCoroutine(SettleEverything(fadeTime));
+    }
+
+    IEnumerator SettleEverything(float fadeTime)
+    {
+        float elapsed = 0f;
+        float startVoice = voiceSource.volume;
+        float startAmb = ambienceSource.volume;
+
+        while (elapsed < fadeTime)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / fadeTime;
+            voiceSource.volume = Mathf.Lerp(startVoice, 1f, t); // making the voice loud and clear
+            ambienceSource.volume = Mathf.Lerp(startAmb, 0f, t); // stops bg music
+            yield return null;
+        }
+
+        voiceSource.volume = 1f;
+        ambienceSource.volume = 0f;
     }
 
     IEnumerator FadeAmbience()

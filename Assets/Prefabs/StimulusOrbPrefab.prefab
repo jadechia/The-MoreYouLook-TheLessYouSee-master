@@ -357,7 +357,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: c73101a91b11c9c48bfb1581b5602913, type: 3}
   - {fileID: 8300000, guid: 81efefb289adb14428132e172b2a362b, type: 3}
   voiceClips:
-  - {fileID: 8300000, guid: 6814308484eaf204e955ded2ac2f5f24, type: 3}
+  - {fileID: 8300000, guid: fe3f4b5684d62b946a8188089559e885, type: 3}
   pitchMin: 0.92
   pitchMax: 1.08
   caughtSound: {fileID: 8300000, guid: 673062a79ca4f984498d2dbefb83fceb, type: 3}

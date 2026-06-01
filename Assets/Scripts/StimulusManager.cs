@@ -10,10 +10,14 @@ public class StimulusManager : MonoBehaviour
     public GameObject stimulusPrefab;
 
     [Header("Spawn Settings")]
-    public float initialDelay = 6f;
+    public float initialDelay = 0.9f;
 
     [Header("Escalation")]
-    public int maxSimultaneousStimuli = 7;
+    public int maxSimultaneousStimuli = 50;
+        [Header("Population")]
+    public int minimumStimuli = 2;  
+    public float topUpCheckInterval = 2f;
+    private float topUpTimer = 0f;
 
     // State
     private List<Stimulus> activeStimuli = new List<Stimulus>();
@@ -48,17 +52,34 @@ public class StimulusManager : MonoBehaviour
     {
         if (experienceResolved) return;
         CleanDeadStimuli();
+
+        topUpTimer += Time.deltaTime; // making sure there is always one stimulus to be triggered or loop dies
+        if (topUpTimer >= topUpCheckInterval) {
+            topUpTimer = 0f;
+            while (activeStimuli.Count < minimumStimuli)
+                SpawnStimulus();
+        }
     }
     public void OnStimulusLookedAt(Stimulus s)
     {
         lookCount++;
 
-        // Degrade the scene-level voice
         if (ExperienceAudioManager.Instance != null)
             ExperienceAudioManager.Instance.RegisterLook();
 
-        // Immediately spawn a new distraction
-        StartCoroutine(SpawnAfterDelay(0.5f));
+        if (SubtitleDisplay.Instance != null)
+            SubtitleDisplay.Instance.OnLook(); // restart subtitles!
+
+        if (ResolutionManager.Instance != null)
+        ResolutionManager.Instance.NotifyLook(); // tell the subtitle script its been looked at
+
+        foreach (Stimulus other in activeStimuli)
+        {
+            if (other != null && other != s)
+                other.QuieterScript(0.22f);
+        }
+        // if (activeStimuli.Count < maxSimultaneousStimuli)
+            StartCoroutine(SpawnAfterDelay(0.2f)); // spawn a new distraction right as user looks at a past one 
     }
 
     IEnumerator SpawnAfterDelay(float delay)
@@ -90,7 +111,6 @@ public class StimulusManager : MonoBehaviour
     {
         experienceResolved = true;
         StopAllCoroutines();
-
         foreach (Stimulus s in activeStimuli)
             if (s != null)
                 StartCoroutine(FadeOutStimulus(s));

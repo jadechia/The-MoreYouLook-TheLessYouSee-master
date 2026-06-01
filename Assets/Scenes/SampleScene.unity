@@ -341,7 +341,7 @@ MonoBehaviour:
   m_IsGlobal: 1
   priority: 0
   blendDistance: 0
-  weight: 1
+  weight: 0.7
   sharedProfile: {fileID: 11400000, guid: 6a364cdd591b45140b8da3a9d75eb0b3, type: 2}
 --- !u!4 &326338035
 Transform:
@@ -639,7 +639,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 450343163}
-  - component: {fileID: 450343162}
+  - component: {fileID: 450343164}
   m_Layer: 6
   m_Name: AttentionMap
   m_TagString: Untagged
@@ -647,7 +647,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &450343162
+--- !u!4 &450343163
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 450343161}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.31603, y: -0.78826, z: 1.36531}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &450343164
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -662,22 +677,22 @@ MonoBehaviour:
   headCamera: {fileID: 1452755246}
   followCameraPosition: 1
   fixedCentre: {x: 0, y: 0, z: 0}
-  radiusAtStart: 4
-  radiusAtMax: 20
-  looksForMaxRadius: 26
-  radiusEaseSpeed: 0.6
-  followDamping: 0.04
+  radiusAtStart: 3
+  radiusAtMax: 14
+  looksForMaxRadius: 30
+  radiusEaseSpeed: 0.5
+  followDamping: 0.03
   splineResolution: 7
-  minSampleDistance: 0.12
-  widthSlow: 0.4
-  widthFast: 0.04
-  speedForThinnest: 5
-  widthEaseSpeed: 2
-  fixationNodePrefab: {fileID: 1493210557043369274, guid: 9e24fb5721fc18648a2415f723566b7d, type: 3}
+  minSampleDistance: 0.05
+  widthSlow: 8
+  widthFast: 0.08
+  speedForThinnest: 6
+  widthEaseSpeed: 1.5
+  fixationNodePrefab: {fileID: 984577324995496852, guid: 377c5119a0099384ea081f7208a64500, type: 3}
   fixationSpeedThreshold: 0.4
-  fixationDwellTime: 0.4
+  fixationDwellTime: 0.6
   fixationCooldown: 0.8
-  lineMaterial: {fileID: 2100000, guid: aea44ce493afd654c8f91ad53ec4b19c, type: 2}
+  lineMaterial: {fileID: 0}
   lineColor:
     serializedVersion: 2
     key0: {r: 1, g: 1, b: 1, a: 1}
@@ -708,21 +723,6 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
---- !u!4 &450343163
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 450343161}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.31603, y: -0.78826, z: 1.36531}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &594692483
 GameObject:
   m_ObjectHideFlags: 0
@@ -958,7 +958,6 @@ GameObject:
   m_Component:
   - component: {fileID: 919087273}
   - component: {fileID: 919087272}
-  - component: {fileID: 919087271}
   - component: {fileID: 919087270}
   m_Layer: 0
   m_Name: MapCamera
@@ -1011,14 +1010,6 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!81 &919087271
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919087269}
-  m_Enabled: 1
 --- !u!20 &919087272
 Camera:
   m_ObjectHideFlags: 0
