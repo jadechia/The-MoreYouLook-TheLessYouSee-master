@@ -1,6 +1,6 @@
 using UnityEngine;
 
-
+// *TRACKS WHERE THE HEAD ANGLE IS AND ADJUSTS THE CAMERA ACCORDINGLY*
 public class HeadTracker : MonoBehaviour
 {
     public static HeadTracker Instance;
@@ -9,10 +9,10 @@ public class HeadTracker : MonoBehaviour
     public Camera headCamera;
 
     [Header("Thresholds (degrees)")]
-    public float fovealThreshold = 25f;   // 'looking at'  cone
-    public float peripheralMin = 30f;      // edge of awareness
-    public float peripheralMax = 80f;      // outer peripheral limit
-    public float spawnBehindMin = 85f;     
+    public float fovealThreshold = 28f; // 'looking at' cone
+    public float peripheralMin = 30f;      // min angle dist to be in periphery
+    public float peripheralMax = 80f;      // outer peripheral limit ( so its not behind user )
+    public float spawnBehindMin = 85f; // defining ehst counts as behind
 
     void Awake()
     {

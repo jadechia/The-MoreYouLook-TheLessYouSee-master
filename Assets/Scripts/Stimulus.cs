@@ -1,16 +1,21 @@
 using System.Collections;
 using UnityEngine;
 
+// *STIMULUS SCRIPT, DETERMINING THE BEHAVIOUR, POSITION, LIFETIME AND AUDIO FOR EACH STIMULUS*
 public class Stimulus : MonoBehaviour
 {
     // sounds:
-    [Header("Audio — Calling Sounds (random selection)")]
-    public AudioClip[] callingSounds;       // assign 4-5 clips
+    [Header("Audio — Calling Sounds (random selection)")]  
+    public AudioClip[] callingSounds;  // the loopeed sound effect that the stimuli lures with
 
     [Header("Audio — Voice Clips (random selection)")]
-    public AudioClip[] voiceClips;          // assign multiple recordings
-    public float pitchMin = 0.92f;          // randomised pitch range
-    public float pitchMax = 1.08f;
+    public AudioClip[] voiceClips;          
+    public float pitchMin = 0.9f; // randomised pitch range
+    public float pitchMax = 1.11f;
+
+    [Header("Arrival Sound")]
+    public AudioSource arrivalSource;
+    public AudioClip[] arrivalSounds;
 
     [Header("Audio — Caught Sound")]
     public AudioClip caughtSound;
@@ -82,7 +87,7 @@ public class Stimulus : MonoBehaviour
         voiceSource   = gameObject.AddComponent<AudioSource>();
 
         ConfigureSource(callingSource, spatialBlend: 1f,  minDist: 1f, maxDist: 8f);
-        ConfigureSource(voiceSource,   spatialBlend: 0f, minDist: 1f, maxDist: 10f);
+        ConfigureSource(voiceSource,   spatialBlend: 0.7f, minDist: 1f, maxDist: 10f);
     }
 
     void ConfigureSource(AudioSource src, float spatialBlend,
@@ -97,6 +102,14 @@ public class Stimulus : MonoBehaviour
         src.playOnAwake  = false;
     }
 
+    void PlayArrivalSound() // the same feedback noise every time a stimulus appears, slightly modified each time
+    {
+        if (arrivalSource == null || arrivalSounds == null || arrivalSounds.Length == 0) return;
+        arrivalSource.clip = arrivalSounds[Random.Range(0, arrivalSounds.Length)];
+        arrivalSource.pitch = Random.Range(0.9f,1.1f);
+        arrivalSource.Play();
+    }
+
     public void Initialize(int lookCount)
     {
         intensity    = 1f + (lookCount * 0.025f);
@@ -109,7 +122,9 @@ public class Stimulus : MonoBehaviour
         transform.localScale = Vector3.one * baseScale;
         transform.position   = GetPeripheralSpawnPosition();
 
-        // Pick a random calling sound from the array
+        PlayArrivalSound();
+
+        // random calling sound from the array
         if (callingSounds != null && callingSounds.Length > 0)
         {
             AudioClip chosen     = callingSounds[Random.Range(0, callingSounds.Length)];
@@ -121,10 +136,9 @@ public class Stimulus : MonoBehaviour
         }
     }
 
-    void Update()
+    void Update() // updating all the stimulus functions and calculating its angle from the users gaze
     {
         if (IsDead) return;
-
         float angle = HeadTracker.Instance.AngleToTarget(transform.position);
 
         UpdateMovement();
@@ -134,7 +148,7 @@ public class Stimulus : MonoBehaviour
     }
 
 
-    void UpdateMovement()
+    void UpdateMovement() // a function to make the stimuli hover & drift away when ignored 
     {
         Vector3 camPos     = HeadTracker.Instance.CameraPosition;
         float currentAngle = HeadTracker.Instance.AngleToTarget(transform.position);
@@ -155,8 +169,8 @@ public class Stimulus : MonoBehaviour
             steer          += toward * boundarySteerStrength * pressure;
         }
 
-        float t = Time.time * noiseSpeed;
-        Vector3 wander = new Vector3(
+        float t = Time.time * noiseSpeed; 
+        Vector3 wander = new Vector3( // using perling noise to randomly move the stimuli
             Mathf.PerlinNoise(t + noiseOffsetX, 0f) * 2f - 1f,
             (Mathf.PerlinNoise(t + noiseOffsetX, 99f) * 2f - 1f) * 0.3f,
             Mathf.PerlinNoise(0f, t + noiseOffsetZ) * 2f - 1f
@@ -165,9 +179,8 @@ public class Stimulus : MonoBehaviour
         Vector3 desired  = wander + steer;
 
         float maxDist    = hasBeenLookedAt ? postLookMaxDistance : preLookMaxDistance;
-        float targetDist = Mathf.Lerp(orbitRadius, maxDist, fadeAmount)
-            + (Mathf.PerlinNoise(t * 0.5f, noiseOffsetX) - 0.5f)
-            * orbitNoiseStrength;
+        float targetDist = Mathf.Lerp(orbitRadius, maxDist, fadeAmount) // gradually moves into distance
+            + (Mathf.PerlinNoise(t * 0.5f, noiseOffsetX) - 0.5f) * orbitNoiseStrength;
 
         float currentDist = Vector3.Distance(transform.position, camPos);
         if (Mathf.Abs(currentDist - targetDist) > 0.3f)
@@ -176,16 +189,13 @@ public class Stimulus : MonoBehaviour
             Vector3 radialTarget = camPos + radialDir * targetDist;
             desired             += (radialTarget - transform.position) * 2f;
         }
-
-        currentVelocity    = Vector3.Lerp(
-            currentVelocity, desired, Time.deltaTime * 2f);
+        currentVelocity    = Vector3.Lerp(currentVelocity, desired, Time.deltaTime * 2f);
         transform.position += currentVelocity * Time.deltaTime;
     }
 
-    Vector3 GetPeripheralSpawnPosition()
+    Vector3 GetPeripheralSpawnPosition() // calculating a position to spawn in (must be within the periphery bounds)
     {
         Vector3 camPos = HeadTracker.Instance.CameraPosition;
-
         for (int i = 0; i < 40; i++)
         {
             Vector3 candidate = camPos + Random.onUnitSphere * orbitRadius;
@@ -194,13 +204,12 @@ public class Stimulus : MonoBehaviour
                 return candidate;
         }
 
-        return camPos
-            + HeadTracker.Instance.headCamera.transform.right * orbitRadius;
+        return camPos + HeadTracker.Instance.headCamera.transform.right * orbitRadius;
     }
 
     public void QuieterScript(float toVolume)
     {
-        if (voiceSource != null && voiceSource.isPlaying)
+        if (voiceSource != null && voiceSource.isPlaying) // checkin to make sure there is a voice first
         voiceSource.volume = toVolume;
     }
 
@@ -208,7 +217,7 @@ public class Stimulus : MonoBehaviour
 
     void UpdateAttention(float angle)
     {
-        if (IsDead) return;
+        if (IsDead) return; // only for living stimuli (solves a glitch)
         if (angle < seenAngle && !hasBeenLookedAt)
         {
             hasBeenLookedAt  = true;
@@ -216,7 +225,7 @@ public class Stimulus : MonoBehaviour
             fadeAmount       = 0f;
 
             if (caughtSound != null)
-            AudioSource.PlayClipAtPoint(caughtSound, transform.position, caughtVolume);
+            AudioSource.PlayClipAtPoint(caughtSound, transform.position, caughtVolume); // play bleep sound as a oneshot audio
 
             // Picking a voice script audio clip and randomising its pitch
             if (voiceClips != null && voiceClips.Length > 0)
@@ -228,7 +237,9 @@ public class Stimulus : MonoBehaviour
                 voiceSource.Play();
             }
 
-            caughtBurst.Play();
+            if (caughtBurst != null) {
+                caughtBurst.Play(); // play the burst particle animation
+            }
 
             StimulusManager.Instance.OnStimulusLookedAt(this);
         }

@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Audio;
-
+// *SCRIPT TO MANUALLY CONTROL THE VOICE AND AMBIENT AUDIO TIMINGS*
 public class ExperienceAudioManager : MonoBehaviour
 {
     public static ExperienceAudioManager Instance;
@@ -17,29 +16,20 @@ public class ExperienceAudioManager : MonoBehaviour
 
     [Header("Voice Track")]
     public AudioClip voiceClip;
-    public AudioMixer audioMixer;
-    public string voiceVolumeParam  = "VoiceVolume";
-    public string voiceLowPassParam = "VoiceLowPass";
 
     [Header("Ambience")]
     public AudioClip ambienceClip;
-    public float ambienceVolume = 0.12f;
+    public float ambienceVolume = 0.12f; 
+    public float minVolume = 0.02f;
 
     [Header("Timing")]
     public float silenceBeforeVoice = 1f;
 
-    [Header("Degradation")]
-    public float volumeDropPerLook  = 0.035f;
-    public float lowPassDropPerLook = 700f;
-    public float minVolume          = 0.02f;
-    public float maxLowPassCutoff   = 22000f;
-    public float minLowPassCutoff   = 350f;
-
-    // State
+   
     private AudioSource voiceSource;
     private AudioSource ambienceSource;
     private float currentVolume;
-    private float currentLowPass;
+
 
     void Awake()
     {
@@ -50,8 +40,8 @@ public class ExperienceAudioManager : MonoBehaviour
 
         introSourceL.spatialBlend = 0f;
         introSourceR.spatialBlend = 0f;
-        introSourceL.panStereo = -1f;   // left ear
-        introSourceR.panStereo =  1f;   // right
+        introSourceL.panStereo = -1f;// left ear
+        introSourceR.panStereo =  1f;// right
         introSourceL.loop = false;
         introSourceR.loop = false;
         introSourceL.playOnAwake = false;
@@ -70,7 +60,6 @@ public class ExperienceAudioManager : MonoBehaviour
         ambienceSource.volume       = ambienceVolume;
 
         currentVolume   = 0.75f;
-        currentLowPass  = maxLowPassCutoff;
     }
 
     void Start() { StartCoroutine(IntroSequence());}
@@ -89,7 +78,7 @@ public class ExperienceAudioManager : MonoBehaviour
         // left ear
         if (introLeft != null)
         {
-            introSourceL.clip = introLeft;
+            introSourceL.clip = introLeft; // 'THE MORE YOU LOOK' whisper
             introSourceL.Play();
             yield return new WaitForSeconds(introLeft.length + introPause);
         }
@@ -97,7 +86,7 @@ public class ExperienceAudioManager : MonoBehaviour
         // right ear
         if (introRight != null)
         {
-            introSourceR.clip = introRight;
+            introSourceR.clip = introRight; // 'the less you see' whisper
             introSourceR.Play();
             yield return new WaitForSeconds(introRight.length);
         }
@@ -112,7 +101,6 @@ public class ExperienceAudioManager : MonoBehaviour
             voiceSource.Play();
         }
 
-        ApplyMixerSettings();
         StartCoroutine(MonitorVoiceCompletion());
     }
 
@@ -128,20 +116,31 @@ public class ExperienceAudioManager : MonoBehaviour
     {
         currentVolume  = Mathf.Max(minVolume, currentVolume *0.28f);
         voiceSource.volume = currentVolume; 
-        ApplyMixerSettings();
     }
 
-    void ApplyMixerSettings()
+
+    public void RestartScript()
     {
-        // if (audioMixer == null) return;
-        // audioMixer.SetFloat(voiceVolumeParam,  db);
-        // audioMixer.SetFloat(voiceLowPassParam, currentLowPass);
+        StopAllCoroutines();
+        currentVolume = 0.75f; // reset the intro volume back to top
+        if (voiceClip != null)
+        {
+            // resetting the voice metrics
+            voiceSource.clip = voiceClip; 
+            voiceSource.volume = currentVolume;
+            voiceSource.time = 0f;
+            voiceSource.Play();
+        }
+        StartCoroutine(MonitorVoiceCompletion());
     }
 
     void OnVoiceCompleted()
     {
-        StimulusManager.Instance.OnExperienceResolved();
-        StartCoroutine(FadeAmbience());
+        if (ResolutionManager.Instance != null &&
+            (ResolutionManager.Instance.ScriptCompleted || ResolutionManager.Instance.IsResolved))
+            return;
+        
+        RestartScript();
     }
 
     public void ResolveAudio(float fadeTime)

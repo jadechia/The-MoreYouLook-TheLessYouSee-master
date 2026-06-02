@@ -1,5 +1,5 @@
 using UnityEngine;
-
+// *SCRIPT TO POSITION THE NUCLEUS WHERE THE HEAD IS LOOKING (& live reflections)*
 public class NucleusSetup : MonoBehaviour
 {
     public ReflectionProbe reflectionProbe;

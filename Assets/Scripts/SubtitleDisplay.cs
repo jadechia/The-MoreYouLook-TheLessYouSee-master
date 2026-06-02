@@ -2,20 +2,7 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 
-/// <summary>
-/// SUBTITLE DISPLAY — fixed-in-view subtitles for the scene voice.
-///
-/// Reveals the transcript one line at a time, paced to match the voice clip's
-/// duration. Every time a stimulus is looked at, the subtitle RESETS to the
-/// first line — the textual echo of losing the thread.
-///
-/// SETUP:
-///   1. World Space Canvas parented to Main Camera, centre-bottom of view.
-///   2. TMP text element assigned to subtitleText.
-///   3. Set totalDuration to your voice clip length (61s here).
-///   4. Set startDelay to match the voice start.
-///   5. StimulusManager calls OnLook() on each look.
-/// </summary>
+// SUBTITLES FOR ONSCREEN TEXT! ALSO SWITCHING BETWEEN SCRIPT, OVERLOAD & OUTRO TEXT*
 public class SubtitleDisplay : MonoBehaviour
 {
     public static SubtitleDisplay Instance;
@@ -29,6 +16,14 @@ public class SubtitleDisplay : MonoBehaviour
 
     [Header("Behaviour")]
     public bool restartOnLook = true;
+
+    [Header("Overload Warning")]
+    public Color warningColor = Color.red;
+
+    [Header("Closing Sequence")]
+    public CanvasGroup darkOverlay;    
+    public TMP_Text resetText;
+    public float overlayFadeTime = 4.5f;
 
     private readonly (string text, float weight)[] lines = new (string, float)[]
     { // i split each line and used weighted lengths to match my cadence
@@ -61,9 +56,9 @@ public class SubtitleDisplay : MonoBehaviour
     void Awake()
     {
         Instance = this;
-        if (subtitleText != null) subtitleText.text = "";
+        if (subtitleText != null) 
+            subtitleText.text = "";
     }
-
     void Start()
     {
         revealRoutine = StartCoroutine(Reveal());
@@ -84,10 +79,36 @@ public class SubtitleDisplay : MonoBehaviour
         revealRoutine = StartCoroutine(RestartReveal());
     }
 
+    public void ShowOverloadWarning(string message) // switching to my overload text
+    {
+        if (revealRoutine != null) StopCoroutine(revealRoutine);  // stop the old script reveal
+        if (subtitleText != null)
+        {
+            subtitleText.color = warningColor;
+            subtitleText.text = message;
+        }
+    }
+
+    public void ClearOverloadWarning() // function so the intructions show again after the warning's finished
+    {
+        if (subtitleText != null)
+        {
+            subtitleText.color = Color.white;
+            subtitleText.text = "";
+        }
+    }
+
     IEnumerator RestartReveal() // restarting the subtitles every time they look at a new stimulus.
     {
         if (subtitleText != null) subtitleText.text = "";
         yield return ShowLines();
+    }
+
+    public void RestartFromTop()
+    {
+        if (revealRoutine != null) StopCoroutine(revealRoutine); 
+        if (subtitleText != null) subtitleText.text = "";
+        revealRoutine = StartCoroutine(ShowLines());
     }
 
     IEnumerator ShowLines()
@@ -100,11 +121,48 @@ public class SubtitleDisplay : MonoBehaviour
 
         for (int i = 0; i < lines.Length; i++)
         {
-            if (subtitleText != null) subtitleText.text = lines[i].text;
+            if (subtitleText != null)       {
+            subtitleText.color = Color.white; 
+            subtitleText.text = lines[i].text;
+        }
             yield return new WaitForSeconds(lines[i].weight * timePerWeight);
         }
 
         if (ResolutionManager.Instance != null)
         ResolutionManager.Instance.OnScriptCompleted();
     }
+
+        public void ShowClosingMessage(string mainLine, string resetMessage)
+    {
+        if (revealRoutine != null) StopCoroutine(revealRoutine);
+        StartCoroutine(ClosingSequence(mainLine, resetMessage));
+    }
+    IEnumerator ClosingSequence(string mainLine, string resetMessage)
+    {
+        if (darkOverlay != null) {
+            float e = 0f;
+            while (e < overlayFadeTime)
+            {
+                e += Time.deltaTime;
+                darkOverlay.alpha = Mathf.Clamp01(e / overlayFadeTime);
+                yield return null;
+            }
+            darkOverlay.alpha = 1f;
+        }
+
+
+        if (subtitleText != null)
+        {
+            subtitleText.color = Color.white;
+            subtitleText.text = mainLine; // change text to the main exit line.
+        }
+
+        yield return new WaitForSeconds(2.4f); // then after a couple seconds the small reset prompt shows up too
+
+        if (resetText != null)
+        {
+            resetText.color = new Color(1f, 1f, 1f, 0.75f); 
+            resetText.text = resetMessage;
+        }
+}
 }

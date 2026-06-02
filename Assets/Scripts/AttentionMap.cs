@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// *ATTENTION MAP SCRIPT FOR CALCULATING THE TRAIL BASED ON HEADSET POSITION*
 public class OrganicGazeMap : MonoBehaviour
 {
     [Header("Gaze Source")]

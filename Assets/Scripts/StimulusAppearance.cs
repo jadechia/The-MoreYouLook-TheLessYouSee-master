@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-
+// *VARYING THE COLOUR AND SIZE OF EACH SRIMULUS*
 
 public class StimulusAppearance : MonoBehaviour
 {
@@ -14,8 +14,8 @@ public class StimulusAppearance : MonoBehaviour
 
     [Header("Links")]
     public ParticleSystem auraParticles;     // the main halo cloud
-    public ParticleSystem caughtBurst;        //spark burst when it's looked at
-    public Light glowLight;                   // tinted to match
+    public ParticleSystem caughtBurst; //spark burst when it's looked at
+    public Light glowLight; // tinting the light child obj to match the colour of the stimulus (forgot initially)
 
     void Awake()
     {

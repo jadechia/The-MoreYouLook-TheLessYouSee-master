@@ -1,5 +1,7 @@
 using System.Collections;
 using UnityEngine;
+
+// *SCRIPT TO HANDLE THE ENDING OF THE EXPERIENCE*
 public class ResolutionManager : MonoBehaviour
 {
     public static ResolutionManager Instance;
@@ -10,13 +12,53 @@ public class ResolutionManager : MonoBehaviour
     [Header("Outro Audio Fade")]
     public float audioFadeTime = 8f;
 
-    [Header("Attention Map Memento")]
-    // public MapCapture mapCapture;     // screencap to export later
+    [Header("Resolution Message")]
+    public string closingLine = "Successful. \n Thank you for your attention";
+    public string resetLine = "You may remove the headset to see your attention map";
+    public float messageDelay = 2f;
+
+    [Header("Nucleus Retreat")]
+    public Transform nucleus; // drag the nucleus in
+    public float nucleusRetreatZ = 11f; // how far it drifts back
+    public float nucleusDriftTime = 2f;
+
+
+    IEnumerator ResolutionSequence()
+    {
+
+        if (StimulusManager.Instance != null)
+            StimulusManager.Instance.OnExperienceResolved(); // end experience
+
+        if (ExperienceAudioManager.Instance != null)
+            ExperienceAudioManager.Instance.ResolveAudio(audioFadeTime); // fading out all sound
+
+        if (nucleus != null)
+            StartCoroutine(DriftNucleus()); // nucleus moves into horizon
+
+        yield return new WaitForSeconds(messageDelay);
+
+        if (SubtitleDisplay.Instance != null)
+            SubtitleDisplay.Instance.ShowClosingMessage(closingLine, resetLine); // showing the final message
+
+        Debug.Log("you did it. thank you for your attention.");
+    }
+
+    IEnumerator DriftNucleus()
+    {
+        // var follow = nucleus.GetComponent<NucleusSetup>(); 
+        // if (follow != null) follow.enabled = false;
+
+        Vector3 p = nucleus.position;
+        p.z = 11f;
+        nucleus.position = p;
+        yield break;
+    }
 
     private bool scriptCompleted = false;
     private bool resolved = false;
     private float calmTimer = 0f;
     private bool counting = false;
+    public bool ScriptCompleted => scriptCompleted;
 
     void Awake() => Instance = this;
 
@@ -53,18 +95,7 @@ public class ResolutionManager : MonoBehaviour
     {
         if (resolved) return;
         resolved = true;
-
-        // Stop spawning stimuli and fade the existing 1s
-        if (StimulusManager.Instance != null)
-            StimulusManager.Instance.OnExperienceResolved();
-
-        if (ExperienceAudioManager.Instance != null)
-            ExperienceAudioManager.Instance.ResolveAudio(audioFadeTime);
-
-        // if (mapCapture != null)
-        //     mapCapture.Capture(); // photograph the attention map as a memento for the user
-
-        Debug.Log("Thank you for your attention.");
+        StartCoroutine(ResolutionSequence());
     }
 
     public bool IsResolved => resolved;

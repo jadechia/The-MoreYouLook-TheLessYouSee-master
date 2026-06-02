@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// *SCRIPT TO TURN MY FIXATION POINTS INTO BRANCHES ON MY ATTENTION MAP*
 public class FixationNode : MonoBehaviour
 {
     [Header("Objects")]
@@ -9,13 +10,13 @@ public class FixationNode : MonoBehaviour
     public GameObject blobPrefab;
 
     [Header("Growth pace")]
-    public float secondsPerGeneration = 0.5f;
-    public int maxGenerations = 3;
+    public float secondsPerGeneration = 0.3f;
+    public int maxGenerations = 4;
 
     [Header("Branch shape")]
-    public Vector2Int branchesPerBlob = new Vector2Int(1, 3);
+    public Vector2Int branchesPerBlob = new Vector2Int(1, 3); // every blob either spawns 1,2 or 3 new branches.
     public float baseBranchLength = 1.3f;
-    [Tooltip("decreasing the size each round by this fraction (multiply not sub)")]
+    [Tooltip("decreasing the size each round by this fraction (it's multiply not sub)")]
     public float lengthFalloff = 0.7f;
     public float baseBranchWidth = 0.06f;
     public float widthFalloff = 0.7f;
@@ -24,13 +25,13 @@ public class FixationNode : MonoBehaviour
     public int branchResolution = 4;
 
     [Header("Blob Size")]
-    public float baseBlobScale = 0.3f;
-    public float blobFalloff = 0.7f;
-    public float blobGrowTime = 0.5f;
+    public float baseBlobScale = 0.38f;
+    public float blobFalloff = 0.75f;
+    public float blobGrowTime = 0.4f;
 
     // private vars to track the internal growth state:
     private int totalBranches = 0;
-    public int absoluteMaxBranches = 24;   // just in case of glitches i'm making a branch ceiling at 24 per node to avoid performance crashes.
+    public int absoluteMaxBranches = 30;   // just in case of glitches i'm making a branch ceiling at 24 per node to avoid performance crashes.
     private int currentGeneration = 0;
     private float dwellAccumulated = 0f;
     private bool growing = true;
@@ -58,7 +59,7 @@ public class FixationNode : MonoBehaviour
     }
 
 
-    public void Expand(float deltaTime)
+    public void Expand(float deltaTime) // growth animation
     {
         if (!growing) return;
         dwellAccumulated += deltaTime;
@@ -72,7 +73,7 @@ public class FixationNode : MonoBehaviour
 
     public void StopGrowing() {growing = false;} // stops the growth of a node, calling it when the gaze moves on
 
-    void GrowGeneration() // func to grow the next generation of node branches each time
+    void GrowGeneration() // func to halt the next generation of node branches if it passes max, performance ceiling
     {
         if (currentGeneration >= maxGenerations) {
             growing = false;
@@ -193,7 +194,7 @@ public class FixationNode : MonoBehaviour
     }
 
 // ----------------------------
-// maths funcs!
+// maths funcs im using!
 // pasting the quadratic bezier, cone direction maths functions i used:
 // referenced https://stackoverflow.com/questions/30339226/finding-points-on-a-quadratic-bezier-curve-path
 //
